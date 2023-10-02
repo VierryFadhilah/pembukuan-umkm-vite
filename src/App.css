@@ -1,0 +1,14 @@
+.sidebar {
+  height: 100vh; /* Menyesuaikan tinggi sidebar dengan tinggi layar */
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f8f9fa;
+  padding-top: 20px;
+}
+
+.content {
+  margin-left: 250px; /* Mengakomodasi lebar sidebar */
+  padding: 20px;
+}
