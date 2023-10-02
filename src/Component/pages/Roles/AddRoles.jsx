@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { getDocs, collection, doc, addDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Swal from "sweetalert2";
+import { redirect, useNavigate } from "react-router-dom";
 
 const AddRoles = () => {
+  const navigate = useNavigate();
   const [dataAccessMenu, setdataAccessMenu] = useState([]);
   const [selectedAccess, setSelectedAccess] = useState([]);
 
@@ -56,13 +58,13 @@ const AddRoles = () => {
         title: "Berhasil!",
         text: "Dokumen berhasil disimpan.",
         showCancelButton: true,
-        confirmButtonText: "Ke Halaman Roles",
+        confirmButtonText: ` Ke Halaman Roles `,
         cancelButtonText: "Masukkan Data Lagi",
       }).then((result) => {
         // Jika pengguna memilih "Ke Halaman Roles"
         if (result.isConfirmed) {
           // Redirect ke halaman "Roles"
-          window.location.href = "/roles";
+          navigate("/roles");
         } else {
           // Mengosongkan formulir dan reset state
           e.target.reset();
