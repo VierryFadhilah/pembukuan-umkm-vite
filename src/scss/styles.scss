@@ -1,19 +1,156 @@
 // Import all of Bootstrap's CSS
 @import "bootstrap/scss/bootstrap";
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins");
 body {
   font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9;
+  color: rgba(50, 50, 50, 0.8);
   /* Jika menggunakan 'Poppins' sebagai nama font di CSS, pastikan nama font ini sesuai dengan nama font Poppins yang Anda miliki. */
 }
 
+.content-table {
+  border-radius: 10px;
+}
+
+/* Menggunakan CSS untuk efek hover dan klik pada elemen .side-menu */
+
+/* Efek cursor tangan saat hover */
 .btn-hover {
   cursor: pointer;
 }
 
-.side-menu :hover {
-  background-color: rgb(26, 26, 26);
+.offcanvas-style {
+  background-color: #5e9299;
 }
 
+/* Transisi latar belakang dengan durasi 0.3s dan fungsi waktu ease */
+.side-menu {
+  transition: background-color 0.3s;
+  padding: 0.5rem;
+  font-size: 16px;
+}
+
+/* Warna latar belakang saat elemen .side-menu dihover */
+.side-menu:hover {
+  background-color: #486e74;
+
+  border-radius: 5px;
+}
+
+/* Warna latar belakang saat elemen .side-menu sedang diklik */
+.side-menu:active {
+  background-color: rgb(59, 59, 59);
+}
+
+/* Margin kiri pada elemen <li> dalam <ul> dengan class list-unstyled */
 ul.list-unstyled > li {
   margin-left: 30px;
+}
+
+/* Gaya dasar untuk tabel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Gaya header tabel */
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Gaya baris ganjil */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Gaya saat hover */
+tr:hover {
+  background-color: #ddd;
+}
+
+/* Gaya untuk tombol aksi */
+.actions-btn {
+  padding: 8px 12px;
+  margin: 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.actions-btn:hover {
+  background-color: #0056b3;
+}
+
+.actions-btn.delete {
+  background-color: #dc3545;
+}
+
+.actions-btn.delete:hover {
+  background-color: #c82333;
+}
+
+.actions-btn.edit {
+  background-color: #28a745;
+}
+
+.actions-btn.edit:hover {
+  background-color: #218838;
+}
+
+.bg-body-nav {
+  background-color: #b8c1c2;
+}
+
+.navbar-brand {
+  background-color: #ededed;
+  border-radius: 5px;
+  margin: 0px;
+}
+
+.btn-print {
+  background-color: #c53333;
+}
+.btn-print:hover {
+  color: white;
+  background-color: #e74d4d;
+}
+.btn-import {
+  background-color: #dba235;
+}
+.btn-import:hover {
+  color: white;
+  background-color: #eab85b;
+}
+.btn-add {
+  background-color: #3ca1c1;
+}
+.btn-add:hover {
+  color: white;
+  background-color: #58c1e1;
+}
+.btn-panduan {
+  background-color: #c8dae0;
+}
+.btn-panduan:hover {
+  color: white;
+  background-color: #dfedf1;
+}
+
+a.page-link {
+  color: #2e2e2e;
 }

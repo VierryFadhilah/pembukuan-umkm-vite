@@ -22,40 +22,85 @@ export default function Roles() {
   };
 
   const deleteRoles = async (id) => {
-    try {
-      const docRef = doc(db, "roles", id);
-      await deleteDoc(docRef);
-      Swal.fire("Deleted!", "", "success");
-      loadDataRoles();
-    } catch (error) {
-      console.error("Error deleting document: ", error);
-      Swal.fire("Error!", "Failed to delete document.", "error");
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const docRef = doc(db, "roles", id);
+          await deleteDoc(docRef);
+          Swal.fire("Deleted!", "", "success");
+          loadDataRoles();
+        } catch (error) {
+          console.error("Error deleting document: ", error);
+          Swal.fire("Error!", "Failed to delete document.", "error");
+        }
+      }
+    });
   };
 
   useEffect(() => {
-    console.log("Data Roles Load");
     loadDataRoles();
   }, []);
 
+  const buttonsData = [
+    {
+      to: "tambah",
+      className: "btn btn-panduan",
+      icon: "bi bi-question-circle",
+      text: "Panduan",
+    },
+    {
+      to: "tambah",
+      className: "btn btn-add",
+      icon: "bi bi-plus-circle-dotted",
+      text: "Tambah Roles",
+    },
+    {
+      to: "tambah",
+      className: "btn btn-import",
+      icon: "bi bi-cloud-arrow-up",
+      text: "Import",
+    },
+    {
+      to: "tambah",
+      className: "btn btn-print",
+      icon: "bi bi-printer",
+      text: "Print",
+    },
+  ];
   return (
-    <div className="container pt-3">
-      <div className="row">
-        <div className="col-md-12">
-          <h1>Roles</h1>
-        </div>
-      </div>
-
-      <div className="row mt-3">
-        <div className="col-md-12">
-          <div className="d-flex justify-content-end mb-2">
-            <Link to="tambah" className="btn btn-primary">
-              Tambah
-            </Link>
+    <>
+      <p className="h2 my-3">Roles</p>
+      <div className="container-fluid bg-white content-table p-2">
+        <div>
+          <div className="row">
+            <div className="d-flex justify-content-end mb-2">
+              {buttonsData.map((button, index) => (
+                <Link
+                  key={index}
+                  to={button.to}
+                  className={`btn ${button.className} mx-1`}
+                >
+                  <div className="d-md-block d-none">
+                    <i className={button.icon}></i> {button.text}
+                  </div>
+                  <div className="d-md-none d-bock">
+                    <i className={button.icon}></i>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
 
           <div className="table-responsive">
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-bordered table-sm align-middle">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -71,23 +116,21 @@ export default function Roles() {
                     <td>{role.name}</td>
                     <td>{role.description}</td>
                     <td>
-                      <div className="row align-items-center text-center">
-                        <div className="col m-2">
-                          <Link
-                            className="btn btn-primary btn-sm"
-                            to={`/roles/edit/${role.id}`}
-                          >
-                            <i className="bi bi-pencil"></i>
-                          </Link>
-                        </div>
-                        <div className="col m-2">
-                          <button
-                            onClick={() => deleteRoles(role.id)}
-                            className="btn btn-danger btn-sm"
-                          >
-                            <i className="bi bi-trash"></i>
-                          </button>
-                        </div>
+                      <div className="d-flex ">
+                        <Link
+                          className="btn btn-primary  me-2"
+                          to={`/roles/edit/${role.id}`}
+                          style={{ textDecoration: "none", color: "#fff" }}
+                        >
+                          <i className="bi bi-pencil"></i>
+                        </Link>
+                        <button
+                          onClick={() => deleteRoles(role.id)}
+                          className="btn btn-danger "
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i className="bi bi-trash"></i>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -95,8 +138,42 @@ export default function Roles() {
               </tbody>
             </table>
           </div>
+          <div>
+            <div className="row ">
+              <div className="col">Showing 10 From 2347 Data</div>
+              <div className="col">
+                <ul class="pagination justify-content-end">
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      Previous
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      1
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      2
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      3
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      Next
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

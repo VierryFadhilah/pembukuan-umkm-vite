@@ -8,13 +8,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [logStatus, setLogStatus] = useState(false);
-  console.log(logStatus);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Username:", email);
-    console.log("Password:", password);
+
     // Add your login logic here, such as API calls or authentication checks
     setLogStatus(true);
 

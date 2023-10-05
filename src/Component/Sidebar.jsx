@@ -1,37 +1,95 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import app from "../firebaseConfig";
+import Swal from "sweetalert2";
+import logo from "../assets/logo.png";
+
+const auth = getAuth(app);
 
 const Sidebar = () => {
+  const signOutUser = () => {
+    Swal.fire({
+      title: "Sign Out?",
+      text: " ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#557089",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sign Out",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        signOut(auth)
+          .then(() => {
+            Swal.fire("Loggged Out", "", "success");
+          })
+          .catch((error) => {
+            // An error happened.
+          });
+      }
+    });
+  };
+
+  const [collapseStatus, setCollapseStatus] = useState({
+    keuangan: false,
+    pembukuan: false,
+    akses: false,
+  });
+
+  const toggleCollapse = (key) => {
+    setCollapseStatus((prevStatus) => ({
+      ...prevStatus,
+      [key]: !prevStatus[key],
+    }));
+
+    // Menutup collapse yang lain saat satu collapse dibuka
+    Object.keys(collapseStatus).forEach((collapseKey) => {
+      if (collapseKey !== key && collapseStatus[collapseKey]) {
+        setCollapseStatus((prevStatus) => ({
+          ...prevStatus,
+          [collapseKey]: false,
+        }));
+      }
+    });
+  };
+
   return (
     <>
-      <nav className="navbar  navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar  navbar-expand-lg bg-body-nav">
         <div className="container-fluid">
           <a
-            className="navbar-brand"
+            className="navbar-brand px-3 py-2"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasExample"
             aria-controls="offcanvasExample"
           >
             <i className="bi bi-list"></i>
           </a>
-          <ul className="navbar-nav mx-auto text-center ">
+
+          <ul className="navbar-nav mx-auto text-center d-md-block d-none">
             <li className="nav-item">
-              <a className="nav-link ">UMKM</a>
+              <div className="row align-items-center">
+                <div className="col">Pembukuan-UMKM by</div>
+                <div className="col">
+                  <img className="pl-2" src={logo} alt="" />
+                </div>
+              </div>
             </li>
+          </ul>
+          <ul className="navbar-nav mx-auto text-center d-md-none d-block">
+            <li className="nav-item">Pembukuan-UMKM</li>
           </ul>
         </div>
       </nav>
 
       <div
-        className="offcanvas offcanvas-start  text-bg-dark"
+        className="offcanvas offcanvas-start offcanvas-style"
         tabIndex="-1"
         id="offcanvasExample"
         aria-labelledby="offcanvasExampleLabel"
       >
         <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="offcanvasExampleLabel">
-            UMKM
-          </h5>
+          <img src={logo} alt="" srcset="" />
           <button
             type="button"
             className="btn-close bg-white"
@@ -55,6 +113,7 @@ const Sidebar = () => {
 
             <li className="nav-item side-menu">
               <span
+                onClick={() => toggleCollapse("keuangan")}
                 className="nav-link text-white btn-hover"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseKeuangan"
@@ -64,7 +123,10 @@ const Sidebar = () => {
                 <i className="bi bi-cash"></i> Keuangan
               </span>
             </li>
-            <div className="collapse" id="collapseKeuangan">
+            <div
+              className={`collapse ${collapseStatus.keuangan ? "show" : ""}`}
+              id="collapseKeuangan"
+            >
               <ul className="list-unstyled">
                 <li className="side-menu" data-bs-dismiss="offcanvas">
                   <Link to="/pemasukan" className="nav-link text-white">
@@ -86,6 +148,7 @@ const Sidebar = () => {
 
             <li className="nav-item side-menu">
               <span
+                onClick={() => toggleCollapse("pembukuan")}
                 className="nav-link text-white btn-hover"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapsePembukuan"
@@ -95,7 +158,10 @@ const Sidebar = () => {
                 <i className="bi bi-book"></i> Pembukuan
               </span>
             </li>
-            <div className="collapse" id="collapsePembukuan">
+            <div
+              className={`collapse ${collapseStatus.pembukuan ? "show" : ""}`}
+              id="collapsePembukuan"
+            >
               <ul className="list-unstyled">
                 <li className="side-menu" data-bs-dismiss="offcanvas">
                   <Link to="/harian" className="nav-link text-white">
@@ -117,6 +183,7 @@ const Sidebar = () => {
 
             <li className="nav-item side-menu">
               <span
+                onClick={() => toggleCollapse("akses")}
                 className="nav-link text-white btn-hover"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseAkses"
@@ -126,7 +193,10 @@ const Sidebar = () => {
                 <i className="bi bi-lock"></i> Akses
               </span>
             </li>
-            <div className="collapse" id="collapseAkses">
+            <div
+              className={`collapse ${collapseStatus.akses ? "show" : ""}`}
+              id="collapseAkses"
+            >
               <ul className="list-unstyled">
                 <li className="side-menu" data-bs-dismiss="offcanvas">
                   <Link to="/user" className="nav-link text-white">
@@ -183,7 +253,7 @@ const Sidebar = () => {
                 <hr className="dropdown-divider" />
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="#" onClick={signOutUser}>
                   Sign out
                 </a>
               </li>
