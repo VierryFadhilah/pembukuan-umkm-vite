@@ -1,2 +1,19 @@
 // Import all of Bootstrap's CSS
 @import "bootstrap/scss/bootstrap";
+
+body {
+  font-family: "Poppins", sans-serif;
+  /* Jika menggunakan 'Poppins' sebagai nama font di CSS, pastikan nama font ini sesuai dengan nama font Poppins yang Anda miliki. */
+}
+
+.btn-hover {
+  cursor: pointer;
+}
+
+.side-menu :hover {
+  background-color: rgb(26, 26, 26);
+}
+
+ul.list-unstyled > li {
+  margin-left: 30px;
+}

@@ -30,7 +30,7 @@ const Sidebar = () => {
       >
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasExampleLabel">
-            GenoCorp
+            UMKM
           </h5>
           <button
             type="button"
@@ -41,37 +41,112 @@ const Sidebar = () => {
         </div>
         <div className="offcanvas-body ">
           <ul className="nav nav-pills flex-column mb-auto">
-            <li data-bs-dismiss="offcanvas">
+            <li className="side-menu" data-bs-dismiss="offcanvas">
               <Link className="nav-link text-white " to={"/"}>
-                Beranda
+                <i className="bi bi-house"></i> Beranda
               </Link>
             </li>
-            <li data-bs-dismiss="offcanvas">
-              <Link className="nav-link text-white" to="dashboard">
-                Dashboard
+
+            <li className="side-menu" data-bs-dismiss="offcanvas">
+              <Link className="nav-link text-white" to="/dashboard">
+                <i className="bi bi-bar-chart"></i> Dashboard
               </Link>
             </li>
-            <li data-bs-dismiss="offcanvas">
-              <Link className="nav-link text-white" to="user">
-                User
-              </Link>
+
+            <li className="nav-item side-menu">
+              <span
+                className="nav-link text-white btn-hover"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseKeuangan"
+                aria-expanded="false"
+                aria-controls="collapseKeuangan"
+              >
+                <i className="bi bi-cash"></i> Keuangan
+              </span>
             </li>
-            <li data-bs-dismiss="offcanvas">
-              <Link className="nav-link text-white" to="roles">
-                roles
-              </Link>
+            <div className="collapse" id="collapseKeuangan">
+              <ul className="list-unstyled">
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/pemasukan" className="nav-link text-white">
+                    <i className="bi bi-arrow-up-circle"></i> Pemasukan
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/pengeluaran" className="nav-link text-white">
+                    <i className="bi bi-arrow-down-circle"></i> Pengeluaran
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/kasbon" className="nav-link text-white">
+                    <i className="bi bi-cash-coin"></i> Kasbon
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <li className="nav-item side-menu">
+              <span
+                className="nav-link text-white btn-hover"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapsePembukuan"
+                aria-expanded="false"
+                aria-controls="collapsePembukuan"
+              >
+                <i className="bi bi-book"></i> Pembukuan
+              </span>
             </li>
-            <li data-bs-dismiss="offcanvas">
-              <Link to={"pemasukan"} className="nav-link text-white">
-                Pemasukan
-              </Link>
+            <div className="collapse" id="collapsePembukuan">
+              <ul className="list-unstyled">
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/harian" className="nav-link text-white">
+                    <i className="bi bi-calendar-day"></i> Harian
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/bulanan" className="nav-link text-white">
+                    <i className="bi bi-calendar-month"></i> Bulanan
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/tahunan" className="nav-link text-white">
+                    <i className="bi bi-calendar"></i> Tahunan
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <li className="nav-item side-menu">
+              <span
+                className="nav-link text-white btn-hover"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseAkses"
+                aria-expanded="false"
+                aria-controls="collapseAkses"
+              >
+                <i className="bi bi-lock"></i> Akses
+              </span>
             </li>
-            <li data-bs-dismiss="offcanvas">
-              <Link to={"pengeluaran"} className="nav-link text-white">
-                Pengeluaran
-              </Link>
-            </li>
+            <div className="collapse" id="collapseAkses">
+              <ul className="list-unstyled">
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/user" className="nav-link text-white">
+                    <i className="bi bi-people"></i> User
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/roles" className="nav-link text-white">
+                    <i className="bi bi-person-badge"></i> Roles
+                  </Link>
+                </li>
+                <li className="side-menu" data-bs-dismiss="offcanvas">
+                  <Link to="/toko" className="nav-link text-white">
+                    <i className="bi bi-shop"></i> Toko
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </ul>
+
           <hr />
           <div className="dropdown">
             <a
