@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from "../firebaseConfig";
+import Api from "../Api";
 
 const auth = getAuth(app);
 
-export default function LoginPage() {
+export default function LoginPage({ setLogStatus }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [logStatus, setLogStatus] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Add your login logic here, such as API calls or authentication checks
-    setLogStatus(true);
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -22,8 +19,22 @@ export default function LoginPage() {
         // ...
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log(error.message);
+        Api.loginEmployee(email, password).then((val) => {
+          if (val.id) {
+            Api.getData("roles", val.data.roles_id).then((acces) => {
+              const logStatus = JSON.stringify({
+                status: true,
+                access_menu: acces.access_id,
+              });
+              localStorage.setItem("logStatus", logStatus);
+              setLogStatus({
+                status: true,
+                access_menu: acces.access_id,
+              });
+            });
+          }
+        });
       });
   };
   return (
@@ -40,7 +51,7 @@ export default function LoginPage() {
                       Email:
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       className="form-control"
                       id="email"
                       value={email}
@@ -61,6 +72,7 @@ export default function LoginPage() {
                       required
                     />
                   </div>
+
                   <button type="submit" className="btn btn-primary">
                     Login
                   </button>

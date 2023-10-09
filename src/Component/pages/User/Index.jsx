@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import Api from "../../../Api";
+import { DatatableCore } from "../../DatatableCore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { DatatableCore } from "../../DatatableCore";
-import Api from "../../../Api";
 
-export default function Roles() {
-  const [dataRoles, setDataRoles] = useState([]);
+export default function User() {
+  const [dataUser, setDataUser] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [limitNumber, setLimitNumber] = useState(5);
 
-  const loadDataRoles = () => {
-    Api.getDataList("roles", searchValue, limitNumber).then((val) => {
-      setDataRoles(val);
+  const loadDataUser = () => {
+    Api.getDataList("user", searchValue, limitNumber).then((val) => {
+      setDataUser(val);
     });
   };
 
-  const nextPage = (lastData) => {
-    Api.getDataList("roles", searchValue, limitNumber, lastData).then((val) => {
-      setDataRoles(val);
-    });
-  };
-
-  const deleteRoles = async (id) => {
+  const deleteUser = async (id) => {
     Swal.fire({
       title: "Hapus?",
       text: "Data yang di hapus tidak dapat Dikembalikan!",
@@ -34,25 +27,18 @@ export default function Roles() {
       confirmButtonText: "Ya, Hapus!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await Api.deleteData("roles", id);
+        await Api.deleteData("user", id);
         Swal.fire("Deleted!", "", "success");
-        loadDataRoles();
+        loadDataUser();
       }
     });
   };
 
-  useEffect(() => {
-    loadDataRoles();
-  }, [searchValue, limitNumber]);
-
   const columns = [
+    { name: "Nama", selector: (row) => row.data.name },
     {
-      name: "Nama Roles",
-      selector: (row) => row.data.name,
-    },
-    {
-      name: "Deskripsi",
-      selector: (row) => row.data.description,
+      name: "Email",
+      selector: (row) => row.data.email,
     },
     {
       name: "Aksi",
@@ -60,13 +46,13 @@ export default function Roles() {
         <div className="d-flex ">
           <Link
             className="btn btn-primary  me-2"
-            to={`/roles/edit/${row.id}`}
+            to={`edit/${row.id}`}
             style={{ textDecoration: "none", color: "#fff" }}
           >
             <i className="bi bi-pencil"></i>
           </Link>
           <button
-            onClick={() => deleteRoles(row.id)}
+            onClick={() => deleteUser(row.id)}
             className="btn btn-danger "
             style={{ cursor: "pointer" }}
           >
@@ -77,15 +63,18 @@ export default function Roles() {
     },
   ];
 
+  useEffect(() => {
+    loadDataUser();
+  }, [searchValue, limitNumber]);
+
   return (
     <>
-      {dataRoles ? (
+      {dataUser ? (
         <DatatableCore
-          data={dataRoles}
+          data={dataUser}
           columns={columns}
-          title="Roles"
+          title="User"
           setSearchValue={setSearchValue}
-          nextPage={nextPage}
           setLimitNumber={setLimitNumber}
         />
       ) : (

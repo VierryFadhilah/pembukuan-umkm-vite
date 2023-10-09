@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { getDocs, collection, doc, addDoc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  doc,
+  addDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Swal from "sweetalert2";
 import { redirect, useNavigate } from "react-router-dom";
+import Api from "../../../Api";
 
 const AddRoles = () => {
   const navigate = useNavigate();
@@ -12,7 +20,11 @@ const AddRoles = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "access_menu"));
+        const q = query(
+          collection(db, "access_menu"),
+          orderBy("no_urut", "asc")
+        );
+        const querySnapshot = await getDocs(q);
         const dataAccessMenu = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name,
@@ -44,32 +56,31 @@ const AddRoles = () => {
 
     const formDataWithAccess = {
       name,
+      search: name.toLowerCase(),
       description,
       access_id: selectedAccess,
     };
 
     try {
-      const rolesRef = collection(db, "roles");
-      const docRef = await addDoc(rolesRef, formDataWithAccess);
-      console.log("Document written with ID: ", docRef.id);
-
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Dokumen berhasil disimpan.",
-        showCancelButton: true,
-        confirmButtonText: ` Ke Halaman Roles `,
-        cancelButtonText: "Masukkan Data Lagi",
-      }).then((result) => {
-        // Jika pengguna memilih "Ke Halaman Roles"
-        if (result.isConfirmed) {
-          // Redirect ke halaman "Roles"
-          navigate("/roles");
-        } else {
-          // Mengosongkan formulir dan reset state
-          e.target.reset();
-          setIsChecked(false);
-        }
+      Api.insertData("roles", formDataWithAccess).then((val) => {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: `Dokumen berhasil disimpan. ID: ${val}`,
+          showCancelButton: true,
+          confirmButtonText: ` Ke Halaman Roles `,
+          cancelButtonText: "Masukkan Data Lagi",
+        }).then((result) => {
+          // Jika pengguna memilih "Ke Halaman Roles"
+          if (result.isConfirmed) {
+            // Redirect ke halaman "Roles"
+            navigate("/roles");
+          } else {
+            // Mengosongkan formulir dan reset state
+            e.target.reset();
+            setIsChecked(false);
+          }
+        });
       });
 
       e.target.reset();
@@ -89,14 +100,14 @@ const AddRoles = () => {
         checked={selectedAccess.includes(access.id)}
         onChange={() => handleCheckboxChange(access.id)}
       />
-      <label className="form-check-label" htmlFor={access.name}>
+      <label className="form-check-label" htmlFor={access.slug}>
         {access.slug}
       </label>
     </div>
   ));
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
       <h2>Tambah Roles</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -123,7 +134,7 @@ const AddRoles = () => {
             required
           ></textarea>
         </div>
-
+        <label className="form-label">Akses :</label>
         {items}
 
         <button type="submit" className="btn btn-primary">

@@ -71,8 +71,6 @@ export const UpdateRoles = () => {
       description,
       access_id: selectedAccess,
     };
-
-    console.log("formDataWithAccess", formDataWithAccess);
   };
 
   const items = dataAccessMenu.map((access) => (

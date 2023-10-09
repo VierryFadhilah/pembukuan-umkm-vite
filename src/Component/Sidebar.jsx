@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import app from "../firebaseConfig";
 import Swal from "sweetalert2";
@@ -7,7 +7,8 @@ import logo from "../assets/logo.png";
 
 const auth = getAuth(app);
 
-const Sidebar = () => {
+const Sidebar = ({ access_menu, setLogStatus }) => {
+  const navigate = useNavigate();
   const signOutUser = () => {
     Swal.fire({
       title: "Sign Out?",
@@ -26,6 +27,9 @@ const Sidebar = () => {
           .catch((error) => {
             // An error happened.
           });
+
+        localStorage.clear();
+        setLogStatus({ status: false });
       }
     });
   };
@@ -89,7 +93,7 @@ const Sidebar = () => {
         aria-labelledby="offcanvasExampleLabel"
       >
         <div className="offcanvas-header">
-          <img src={logo} alt="" srcset="" />
+          <img src={logo} alt="" />
           <button
             type="button"
             className="btn-close bg-white"
@@ -104,117 +108,134 @@ const Sidebar = () => {
                 <i className="bi bi-house"></i> Beranda
               </Link>
             </li>
-
-            <li className="side-menu" data-bs-dismiss="offcanvas">
-              <Link className="nav-link text-white" to="/dashboard">
-                <i className="bi bi-bar-chart"></i> Dashboard
-              </Link>
-            </li>
-
-            <li className="nav-item side-menu">
-              <span
-                onClick={() => toggleCollapse("keuangan")}
-                className="nav-link text-white btn-hover"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseKeuangan"
-                aria-expanded="false"
-                aria-controls="collapseKeuangan"
-              >
-                <i className="bi bi-cash"></i> Keuangan
-              </span>
-            </li>
-            <div
-              className={`collapse ${collapseStatus.keuangan ? "show" : ""}`}
-              id="collapseKeuangan"
-            >
-              <ul className="list-unstyled">
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/pemasukan" className="nav-link text-white">
-                    <i className="bi bi-arrow-up-circle"></i> Pemasukan
-                  </Link>
+            {access_menu.includes("dashboard") ? (
+              <li className="side-menu" data-bs-dismiss="offcanvas">
+                <Link className="nav-link text-white" to="/dashboard">
+                  <i className="bi bi-bar-chart"></i> Dashboard
+                </Link>
+              </li>
+            ) : (
+              ""
+            )}
+            {access_menu.includes("keuangan") ? (
+              <>
+                <li className="nav-item side-menu">
+                  <span
+                    onClick={() => toggleCollapse("keuangan")}
+                    className="nav-link text-white btn-hover"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseKeuangan"
+                    aria-expanded="false"
+                    aria-controls="collapseKeuangan"
+                  >
+                    <i className="bi bi-cash"></i> Keuangan
+                  </span>
                 </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/pengeluaran" className="nav-link text-white">
-                    <i className="bi bi-arrow-down-circle"></i> Pengeluaran
-                  </Link>
+                <div
+                  className={`collapse ${
+                    collapseStatus.keuangan ? "show" : ""
+                  }`}
+                  id="collapseKeuangan"
+                >
+                  <ul className="list-unstyled">
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/pemasukan" className="nav-link text-white">
+                        <i className="bi bi-arrow-up-circle"></i> Pemasukan
+                      </Link>
+                    </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/pengeluaran" className="nav-link text-white">
+                        <i className="bi bi-arrow-down-circle"></i> Pengeluaran
+                      </Link>
+                    </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/kasbon" className="nav-link text-white">
+                        <i className="bi bi-cash-coin"></i> Kasbon
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            {access_menu.includes("pembukuan") ? (
+              <>
+                <li className="nav-item side-menu">
+                  <span
+                    onClick={() => toggleCollapse("pembukuan")}
+                    className="nav-link text-white btn-hover"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapsePembukuan"
+                    aria-expanded="false"
+                    aria-controls="collapsePembukuan"
+                  >
+                    <i className="bi bi-book"></i> Pembukuan
+                  </span>
                 </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/kasbon" className="nav-link text-white">
-                    <i className="bi bi-cash-coin"></i> Kasbon
-                  </Link>
+                <div
+                  className={`collapse ${
+                    collapseStatus.pembukuan ? "show" : ""
+                  }`}
+                  id="collapsePembukuan"
+                >
+                  <ul className="list-unstyled">
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/harian" className="nav-link text-white">
+                        <i className="bi bi-calendar-day"></i> Harian
+                      </Link>
+                    </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/bulanan" className="nav-link text-white">
+                        <i className="bi bi-calendar-month"></i> Bulanan
+                      </Link>
+                    </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/tahunan" className="nav-link text-white">
+                        <i className="bi bi-calendar"></i> Tahunan
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            {access_menu.includes("akses") ? (
+              <>
+                <li className="nav-item side-menu">
+                  <span
+                    onClick={() => toggleCollapse("akses")}
+                    className="nav-link text-white btn-hover"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseAkses"
+                    aria-expanded="false"
+                    aria-controls="collapseAkses"
+                  >
+                    <i className="bi bi-lock"></i> Akses
+                  </span>
                 </li>
-              </ul>
-            </div>
-
-            <li className="nav-item side-menu">
-              <span
-                onClick={() => toggleCollapse("pembukuan")}
-                className="nav-link text-white btn-hover"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapsePembukuan"
-                aria-expanded="false"
-                aria-controls="collapsePembukuan"
-              >
-                <i className="bi bi-book"></i> Pembukuan
-              </span>
-            </li>
-            <div
-              className={`collapse ${collapseStatus.pembukuan ? "show" : ""}`}
-              id="collapsePembukuan"
-            >
-              <ul className="list-unstyled">
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/harian" className="nav-link text-white">
-                    <i className="bi bi-calendar-day"></i> Harian
-                  </Link>
-                </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/bulanan" className="nav-link text-white">
-                    <i className="bi bi-calendar-month"></i> Bulanan
-                  </Link>
-                </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/tahunan" className="nav-link text-white">
-                    <i className="bi bi-calendar"></i> Tahunan
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <li className="nav-item side-menu">
-              <span
-                onClick={() => toggleCollapse("akses")}
-                className="nav-link text-white btn-hover"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseAkses"
-                aria-expanded="false"
-                aria-controls="collapseAkses"
-              >
-                <i className="bi bi-lock"></i> Akses
-              </span>
-            </li>
-            <div
-              className={`collapse ${collapseStatus.akses ? "show" : ""}`}
-              id="collapseAkses"
-            >
-              <ul className="list-unstyled">
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/user" className="nav-link text-white">
-                    <i className="bi bi-people"></i> User
-                  </Link>
-                </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/roles" className="nav-link text-white">
-                    <i className="bi bi-person-badge"></i> Roles
-                  </Link>
-                </li>
-                <li className="side-menu" data-bs-dismiss="offcanvas">
-                  <Link to="/toko" className="nav-link text-white">
-                    <i className="bi bi-shop"></i> Toko
-                  </Link>
-                </li>
-              </ul>
-            </div>
+                <div
+                  className={`collapse ${collapseStatus.akses ? "show" : ""}`}
+                  id="collapseAkses"
+                >
+                  <ul className="list-unstyled">
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/user" className="nav-link text-white">
+                        <i className="bi bi-people"></i> User
+                      </Link>
+                    </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/roles" className="nav-link text-white">
+                        <i className="bi bi-person-badge"></i> Roles
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </ul>
 
           <hr />
@@ -234,11 +255,6 @@ const Sidebar = () => {
               <strong>Setting</strong>
             </a>
             <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-              <li>
-                <a className="dropdown-item" href="#">
-                  New project...
-                </a>
-              </li>
               <li>
                 <a className="dropdown-item" href="#">
                   Settings

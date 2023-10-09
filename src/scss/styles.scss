@@ -1,4 +1,7 @@
 // Import all of Bootstrap's CSS
+$primary: #3ca1c1;
+$danger: #c53333;
+
 @import "bootstrap/scss/bootstrap";
 @import url("https://fonts.googleapis.com/css2?family=Poppins");
 body {
@@ -149,6 +152,13 @@ tr:hover {
 .btn-panduan:hover {
   color: white;
   background-color: #dfedf1;
+}
+.btn-filter {
+  background-color: #f9f6f6;
+}
+.btn-filter:hover {
+  color: white;
+  background-color: rgb(192, 204, 208);
 }
 
 a.page-link {
