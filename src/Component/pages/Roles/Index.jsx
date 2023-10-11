@@ -12,6 +12,7 @@ export default function Roles() {
 
   const loadDataRoles = () => {
     Api.getDataList("roles", searchValue, limitNumber).then((val) => {
+      console.log(val);
       setDataRoles(val);
     });
   };
@@ -87,6 +88,7 @@ export default function Roles() {
           setSearchValue={setSearchValue}
           nextPage={nextPage}
           setLimitNumber={setLimitNumber}
+          search
         />
       ) : (
         <div>Loading ...</div>

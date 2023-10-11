@@ -9,33 +9,42 @@ export const DatatableCore = ({
   setSearchValue,
   nextPage,
   previousPage,
+  search,
+  footer,
+  dateTable,
+  btnTambahan,
 }) => {
   const buttonsData = [
     {
-      to: "tambah",
+      to: "",
       className: "btn btn-panduan",
       icon: "bi bi-question-circle",
       text: "Panduan",
     },
-    {
-      to: "tambah",
-      className: "btn btn-add",
-      icon: "bi bi-plus-circle-dotted",
-      text: "Tambah",
-    },
-    {
-      to: "tambah",
-      className: "btn btn-import",
-      icon: "bi bi-cloud-arrow-up",
-      text: "Import",
-    },
-    {
-      to: "tambah",
-      className: "btn btn-print",
-      icon: "bi bi-printer",
-      text: "Print",
-    },
+    // {
+    //   to: "tambah",
+    //   className: "btn btn-add",
+    //   icon: "bi bi-plus-circle-dotted",
+    //   text: "Tambah",
+    // },
+    // {
+    //   to: "tambah",
+    //   className: "btn btn-import",
+    //   icon: "bi bi-cloud-arrow-up",
+    //   text: "Import",
+    // },
+    // {
+    //   to: "tambah",
+    //   className: "btn btn-print",
+    //   icon: "bi bi-printer",
+    //   text: "Print",
+    // },
   ];
+  if (btnTambahan) {
+    btnTambahan.forEach((element) => {
+      buttonsData.push(element);
+    });
+  }
 
   return (
     <>
@@ -61,37 +70,46 @@ export const DatatableCore = ({
             </div>
           </div>
           <div className="row mb-2">
-            <div className="col">
-              <select
-                className="btn btn-filter"
-                name=""
-                id=""
-                onChange={(e) => setLimitNumber(parseInt(e.target.value))}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <div className="col">
-              <form className="d-flex" role="search">
-                <div className="input-group">
-                  <span className="input-group-text" id="basic-addon1">
-                    <i className="bi bi-search"></i>
-                  </span>
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      setSearchValue(e.target.value);
-                    }}
-                    className="form-control"
-                    placeholder="Cari "
-                    aria-label="Search"
-                    aria-describedby="basic-addon1"
-                  />
-                </div>
-              </form>
-            </div>
+            {setLimitNumber ? (
+              <div className="col">
+                <select
+                  className="btn btn-filter"
+                  name=""
+                  id=""
+                  onChange={(e) => setLimitNumber(parseInt(e.target.value))}
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+            ) : (
+              ""
+            )}
+            {dateTable ? <>{dateTable}</> : ""}
+            {search ? (
+              <div className="col">
+                <form className="d-flex" role="search">
+                  <div className="input-group">
+                    <span className="input-group-text" id="basic-addon1">
+                      <i className="bi bi-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                      }}
+                      className="form-control"
+                      placeholder="Cari "
+                      aria-label="Search"
+                      aria-describedby="basic-addon1"
+                    />
+                  </div>
+                </form>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <div className="table-responsive">
             <table className="table table-striped table-bordered table-sm align-middle">
@@ -117,34 +135,53 @@ export const DatatableCore = ({
                   </tr>
                 ))}
               </tbody>
+              {footer ? (
+                <tfoot>
+                  <tr>
+                    {footer.map((col, index) => (
+                      <th scope="col" key={index}>
+                        {col.name}
+                      </th>
+                    ))}
+                  </tr>
+                </tfoot>
+              ) : (
+                ""
+              )}
             </table>
           </div>
-          <div className="row">
-            <div className="col"></div>
-            <div className="col">
-              <ul className="pagination justify-content-end">
-                <li>
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => previousPage()}
-                  >
-                    Previous
-                  </a>
-                </li>
+          {nextPage ? (
+            <div className="row">
+              <div className="col"></div>
+              <div className="col">
+                <ul className="pagination justify-content-end">
+                  <li>
+                    <a
+                      className="page-link"
+                      href="#"
+                      onClick={() => previousPage()}
+                    >
+                      Previous
+                    </a>
+                  </li>
 
-                <li>
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => nextPage(data[data.length - 1].data.search)}
-                  >
-                    Next
-                  </a>
-                </li>
-              </ul>
+                  <li>
+                    <a
+                      className="page-link"
+                      href="#"
+                      onClick={() =>
+                        nextPage(data[data.length - 1].data.search)
+                      }
+                    >
+                      Next
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

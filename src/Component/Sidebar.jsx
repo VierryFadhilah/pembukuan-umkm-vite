@@ -148,11 +148,11 @@ const Sidebar = ({ access_menu, setLogStatus }) => {
                         <i className="bi bi-arrow-down-circle"></i> Pengeluaran
                       </Link>
                     </li>
-                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                    {/* <li className="side-menu" data-bs-dismiss="offcanvas">
                       <Link to="/kasbon" className="nav-link text-white">
                         <i className="bi bi-cash-coin"></i> Kasbon
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </>
@@ -181,12 +181,18 @@ const Sidebar = ({ access_menu, setLogStatus }) => {
                 >
                   <ul className="list-unstyled">
                     <li className="side-menu" data-bs-dismiss="offcanvas">
-                      <Link to="/harian" className="nav-link text-white">
+                      <Link
+                        to="/pembukuan/harian"
+                        className="nav-link text-white"
+                      >
                         <i className="bi bi-calendar-day"></i> Harian
                       </Link>
                     </li>
                     <li className="side-menu" data-bs-dismiss="offcanvas">
-                      <Link to="/bulanan" className="nav-link text-white">
+                      <Link
+                        to="/pembukuan/bulanan"
+                        className="nav-link text-white"
+                      >
                         <i className="bi bi-calendar-month"></i> Bulanan
                       </Link>
                     </li>

@@ -42,4 +42,16 @@ return :
 }
 ```
 
-##
+## GET Pemasukan
+
+```json
+{
+  "total": 200000,
+  "transaksi": [
+    {
+      "deskripsi": "viviate",
+      "nominal": 200000
+    }
+  ]
+}
+```

@@ -18,6 +18,13 @@ import User from "./Component/pages/User/Index";
 import { AddUser } from "./Component/pages/User/AddUser";
 import { EmptyPage } from "./Component/pages/EmptyPage";
 import { UpdateUser } from "./Component/pages/User/UpdateUser";
+import Pemasukan from "./Component/pages/Pemasukan/Index";
+import AddPemasukan from "./Component/pages/Pemasukan/AddPemasukan";
+import Pengeluaran from "./Component/pages/Pengeluaran/Index";
+import AddPengeluaran from "./Component/pages/Pengeluaran/AddPengeluaran";
+import Harian from "./Component/pages/Harian/Index";
+import Detail from "./Component/pages/Harian/Detail";
+import Bulanan from "./Component/pages/Bulanan/Index";
 
 function App() {
   const [logStatus, setLogStatus] = useState({
@@ -84,6 +91,40 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+
+                {/* keuangan */}
+
+                <Route path="/pemasukan" element={<Pemasukan />} />
+                <Route path="/pemasukan/tambah" element={<AddPemasukan />} />
+                <Route path="/pengeluaran" element={<Pengeluaran />} />
+                <Route
+                  path="/pengeluaran/tambah"
+                  element={<AddPengeluaran />}
+                />
+                {/* <Route path="/kasbon" element={<Kasbon />} />
+                <Route path="/kasbon/tambah" element={<AddKasbon />} /> */}
+
+                {/* pembukuan */}
+
+                <Route path="/pembukuan/harian" element={<Harian />} />
+                <Route
+                  path="/pembukuan/harian/view/:id"
+                  loader={({ params }) => {
+                    params.id;
+                  }}
+                  element={<Detail />}
+                />
+                <Route path="/pembukuan/bulanan" element={<Bulanan />} />
+                <Route
+                  path="/pembukuan/bulanan/view/:id"
+                  loader={({ params }) => {
+                    params.id;
+                  }}
+                  element={<Detail />}
+                />
+
+                {/* akses */}
+
                 <Route path="/roles" element={<Roles />} />
                 <Route path="/user" element={<User />} />
                 <Route path="/user/tambah" element={<AddUser />} />
@@ -157,6 +198,8 @@ function App() {
                 )}
 
                 <Route path="/:else" element={<EmptyPage />} />
+                <Route path="/:else/:else" element={<EmptyPage />} />
+                <Route path="/:else/:else/:else" element={<EmptyPage />} />
               </Routes>
             </div>
           </div>
@@ -166,6 +209,15 @@ function App() {
   } else {
     items = <LoginPage setLogStatus={setLogStatus} />;
   }
+
+  if (loading) {
+    return (
+      <>
+        <div className="">Loading ....</div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="App">{items}</div>

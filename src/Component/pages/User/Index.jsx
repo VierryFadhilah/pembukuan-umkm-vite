@@ -76,6 +76,7 @@ export default function User() {
           title="User"
           setSearchValue={setSearchValue}
           setLimitNumber={setLimitNumber}
+          search
         />
       ) : (
         <div>Loading ...</div>
