@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Api from "../../../Api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const AddUser = () => {
   const navigate = useNavigate();
@@ -24,17 +24,31 @@ export const AddUser = () => {
         text: "Password dan retype password tidak sama",
       });
     } else {
-      Api.insertData("user", {
+      console.log("user", {
         email,
         name,
         password,
         roles_id: roles,
-        search: name.toLowerCase(),
+      });
+      Swal.showLoading();
+      const token = localStorage.getItem("token");
+      axios({
+        method: "post",
+        url: `${import.meta.env.VITE_API_URL}/users`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          email,
+          name,
+          password,
+          roles_id: roles,
+        },
       }).then((val) => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: `Dokumen berhasil disimpan. ID: ${val}`,
+          text: `Dokumen berhasil disimpan. ID: ${val.data.data.id}`,
           showCancelButton: true,
           confirmButtonText: ` Ke Halaman User `,
           cancelButtonText: "Masukkan Data Lagi",
@@ -54,15 +68,25 @@ export const AddUser = () => {
 
   const optionRoles = listRoles.map((roles, i) => (
     <option key={i} value={roles.id}>
-      {roles.data.name}
+      {roles.name}
     </option>
   ));
 
-  useEffect(() => {
-    Api.currentUser();
-    Api.getDataList("roles").then((val) => {
-      setListRoles(val);
+  const fetchData = async () => {
+    const token = localStorage.getItem("token");
+    const response = await axios({
+      method: "get",
+      url: `${import.meta.env.VITE_API_URL}/roles`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    setListRoles(response.data.data.data);
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
@@ -78,6 +102,7 @@ export const AddUser = () => {
             className="form-control"
             id="namaUser"
             name="name"
+            autoComplete="off"
             required
           />
         </div>
@@ -90,6 +115,7 @@ export const AddUser = () => {
             className="form-control"
             id="userEmail"
             name="email"
+            autoComplete="off"
             required
           />
         </div>

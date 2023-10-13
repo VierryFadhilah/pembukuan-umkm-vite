@@ -11,6 +11,7 @@ import { db } from "../../../firebaseConfig";
 import Swal from "sweetalert2";
 import { redirect, useNavigate } from "react-router-dom";
 import Api from "../../../Api";
+import axios from "axios";
 
 const AddRoles = () => {
   const navigate = useNavigate();
@@ -62,26 +63,44 @@ const AddRoles = () => {
     };
 
     try {
-      Api.insertData("roles", formDataWithAccess).then((val) => {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil!",
-          text: `Dokumen berhasil disimpan. ID: ${val}`,
-          showCancelButton: true,
-          confirmButtonText: ` Ke Halaman Roles `,
-          cancelButtonText: "Masukkan Data Lagi",
-        }).then((result) => {
-          // Jika pengguna memilih "Ke Halaman Roles"
-          if (result.isConfirmed) {
-            // Redirect ke halaman "Roles"
-            navigate("/roles");
-          } else {
-            // Mengosongkan formulir dan reset state
-            e.target.reset();
-            setIsChecked(false);
-          }
+      // Api.insertData("roles", formDataWithAccess).then((val) => {
+
+      // });
+
+      axios({
+        method: "post",
+        url: `${import.meta.env.VITE_API_URL}/roles`,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization:
+            "Bearer 1|LhWMjlOi43mrkgx7ICwOdtvIRDPer1037vjsmAC6a76b11e3",
+        },
+        data: formDataWithAccess,
+      })
+        .then((_) => {
+          console.log(_.data);
+          // Swal.fire({
+          //   icon: "success",
+          //   title: "Berhasil!",
+          //   text: `Dokumen berhasil disimpan. ID: ${_}`,
+          //   showCancelButton: true,
+          //   confirmButtonText: ` Ke Halaman Roles `,
+          //   cancelButtonText: "Masukkan Data Lagi",
+          // }).then((result) => {
+          //   // Jika pengguna memilih "Ke Halaman Roles"
+          //   if (result.isConfirmed) {
+          //     // Redirect ke halaman "Roles"
+          //     navigate("/roles");
+          //   } else {
+          //     // Mengosongkan formulir dan reset state
+          //     e.target.reset();
+          //     setIsChecked(false);
+          //   }
+          // });
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      });
 
       e.target.reset();
       setSelectedAccess([]);

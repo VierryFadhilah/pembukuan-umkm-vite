@@ -4,22 +4,26 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.1",
     "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
     "firebase": "^10.4.0",
     "react": "^18.2.0",
+    "react-data-table-component": "^7.5.4",
     "react-datepicker": "^4.20.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
+    "styled-components": "^5.3.3",
     "sweetalert2": "^11.7.31"
   },
   "devDependencies": {

@@ -1,40 +1,33 @@
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from "../firebaseConfig";
-import Api from "../Api";
 
-const auth = getAuth(app);
+import axios from "axios";
 
-export default function LoginPage({ setLogStatus }) {
+export default function LoginPage({ setLoading }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    const data = {
+      email,
+      password,
+    };
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        // ...
+    axios({
+      method: "post",
+      url: `${import.meta.env.VITE_API_URL}/login`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: new URLSearchParams(data).toString(),
+    })
+      .then((_) => {
+        localStorage.setItem("token", _.data.data.token);
+        localStorage.setItem("user", JSON.stringify(_.data.data.user));
       })
-      .catch((error) => {
-        console.log(error.message);
-        Api.loginEmployee(email, password).then((val) => {
-          if (val.id) {
-            Api.getData("roles", val.data.roles_id).then((acces) => {
-              const logStatus = JSON.stringify({
-                status: true,
-                access_menu: acces.access_id,
-              });
-              localStorage.setItem("logStatus", logStatus);
-              setLogStatus({
-                status: true,
-                access_menu: acces.access_id,
-              });
-            });
-          }
-        });
+      .finally(() => {
+        setLoading(false);
       });
   };
   return (

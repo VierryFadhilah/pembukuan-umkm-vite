@@ -2,76 +2,116 @@ import React, { useEffect, useState } from "react";
 import Api from "../../../Api";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export const UpdateUser = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const token = localStorage.getItem("token");
 
-  const [userData, setUserData] = useState({});
-
-  useEffect(() => {
-    Api.getData("user", params.id).then((val) => {
-      setUserData(val);
-    });
-  }, []);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    roles_id: 0,
+  });
 
   const [listRoles, setListRoles] = useState([]);
+  const [rolesname, setRolesName] = useState("--Pilih--");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const name = formData.get("name");
     const email = formData.get("email");
-    const password = formData.get("password");
-    const retypepassword = formData.get("retypepassword");
-    const roles = formData.get("roles");
-
-    if (password !== retypepassword) {
-      Swal.fire({
-        icon: "error",
-        text: "Password dan retype password tidak sama",
-      });
-    } else {
-      Api.insertData("user", {
-        email,
-        name,
-        password,
-        roles_id: roles,
-        search: name.toLowerCase(),
-      }).then((val) => {
+    const roles_id = formData.get("roles");
+    console.log("first", {
+      name,
+      email,
+      roles_id,
+    });
+    try {
+      axios({
+        method: "put",
+        url: `${import.meta.env.VITE_API_URL}/users/${params.id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          name,
+          email,
+          roles_id,
+        },
+      }).then(() => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: `Dokumen berhasil disimpan. ID: ${val}`,
+          text: `Dokumen berhasil diupdate`,
           showCancelButton: true,
           confirmButtonText: ` Ke Halaman User `,
-          cancelButtonText: "Masukkan Data Lagi",
+          cancelButtonText: "tutup",
         }).then((result) => {
           // Jika pengguna memilih "Ke Halaman Roles"
           if (result.isConfirmed) {
             // Redirect ke halaman "Roles"
             navigate("/user");
           } else {
-            // Mengosongkan formulir dan reset state
-            e.target.reset();
           }
         });
+      });
+    } catch (error) {
+      console.error("Error updating data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Terjadi kesalahan saat memperbarui data!",
       });
     }
   };
 
   const optionRoles = listRoles.map((roles, i) => (
     <option key={i} value={roles.id}>
-      {roles.data.name}
+      {roles.name}
     </option>
   ));
 
-  useEffect(() => {
-    Api.currentUser();
-    Api.getDataList("roles").then((val) => {
-      setListRoles(val);
+  const fetchData = async () => {
+    Swal.showLoading();
+    const response = await axios({
+      method: "get",
+      url: `${import.meta.env.VITE_API_URL}/roles`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
+    const responseuser = await axios({
+      method: "get",
+      url: `${import.meta.env.VITE_API_URL}/users/${params.id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseroles = await axios({
+      method: "get",
+      url: `${import.meta.env.VITE_API_URL}/roles/${
+        responseuser.data.data.roles_id
+      }`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setRolesName(responseroles.data.data.name);
+
+    setUserData(responseuser.data.data);
+
+    setListRoles(response.data.data.data);
+
+    Swal.close();
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
@@ -87,7 +127,7 @@ export const UpdateUser = () => {
             className="form-control"
             id="namaUser"
             name="name"
-            value={userData.name}
+            defaultValue={userData.name}
             required
           />
         </div>
@@ -99,42 +139,19 @@ export const UpdateUser = () => {
             type="email"
             className="form-control"
             id="userEmail"
-            value={userData.email}
+            defaultValue={userData.email}
             name="email"
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="userPassword" className="form-label">
-            Password :
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="userPassword"
-            name="password"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="userRetypepassword" className="form-label">
-            Re-type Password :
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="userRetypepassword"
-            name="retypepassword"
-            required
-          />
-        </div>
+
         <div className="mb-3">
           <label htmlFor="roles" className="form-label">
             Roles:
           </label>
           <select name="roles" id="roles" className="form-control" required>
-            <option value="" hidden>
-              -- Pilih --
+            <option value={userData.roles_id} hidden>
+              {rolesname}
             </option>
             {optionRoles}
           </select>

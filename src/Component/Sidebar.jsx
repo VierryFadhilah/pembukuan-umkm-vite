@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
-import app from "../firebaseConfig";
 import Swal from "sweetalert2";
 import logo from "../assets/logo.png";
-
-const auth = getAuth(app);
 
 const Sidebar = ({ access_menu, setLogStatus }) => {
   const navigate = useNavigate();
@@ -20,16 +16,9 @@ const Sidebar = ({ access_menu, setLogStatus }) => {
       confirmButtonText: "Sign Out",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        signOut(auth)
-          .then(() => {
-            Swal.fire("Loggged Out", "", "success");
-          })
-          .catch((error) => {
-            // An error happened.
-          });
-
         localStorage.clear();
-        setLogStatus({ status: false });
+        navigate("/");
+        window.location.reload();
       }
     });
   };
