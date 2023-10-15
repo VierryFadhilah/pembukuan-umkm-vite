@@ -137,6 +137,11 @@ const Sidebar = ({ access_menu, setLogStatus }) => {
                         <i className="bi bi-arrow-down-circle"></i> Pengeluaran
                       </Link>
                     </li>
+                    <li className="side-menu" data-bs-dismiss="offcanvas">
+                      <Link to="/pengeluaran" className="nav-link text-white">
+                        <i className="bi bi-cash-coin"></i> Transaksi
+                      </Link>
+                    </li>
                     {/* <li className="side-menu" data-bs-dismiss="offcanvas">
                       <Link to="/kasbon" className="nav-link text-white">
                         <i className="bi bi-cash-coin"></i> Kasbon

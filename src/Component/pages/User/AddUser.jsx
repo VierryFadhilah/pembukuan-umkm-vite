@@ -24,13 +24,8 @@ export const AddUser = () => {
         text: "Password dan retype password tidak sama",
       });
     } else {
-      console.log("user", {
-        email,
-        name,
-        password,
-        roles_id: roles,
-      });
       Swal.showLoading();
+
       const token = localStorage.getItem("token");
       axios({
         method: "post",
@@ -44,25 +39,32 @@ export const AddUser = () => {
           password,
           roles_id: roles,
         },
-      }).then((val) => {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil!",
-          text: `Dokumen berhasil disimpan. ID: ${val.data.data.id}`,
-          showCancelButton: true,
-          confirmButtonText: ` Ke Halaman User `,
-          cancelButtonText: "Masukkan Data Lagi",
-        }).then((result) => {
-          // Jika pengguna memilih "Ke Halaman Roles"
-          if (result.isConfirmed) {
-            // Redirect ke halaman "Roles"
-            navigate("/user");
-          } else {
-            // Mengosongkan formulir dan reset state
-            e.target.reset();
-          }
+      })
+        .then((val) => {
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: `Dokumen berhasil disimpan. ID: ${val.data.data.id}`,
+            showCancelButton: true,
+            confirmButtonText: ` Ke Halaman User `,
+            cancelButtonText: "Masukkan Data Lagi",
+          }).then((result) => {
+            // Jika pengguna memilih "Ke Halaman Roles"
+            if (result.isConfirmed) {
+              // Redirect ke halaman "Roles"
+              navigate("/user");
+            } else {
+              // Mengosongkan formulir dan reset state
+              e.target.reset();
+            }
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: error.response.data.message,
+          });
         });
-      });
     }
   };
 

@@ -19,6 +19,7 @@ export const UpdateUser = () => {
   const [rolesname, setRolesName] = useState("--Pilih--");
 
   const handleSubmit = async (e) => {
+    Swal.showLoading();
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -30,19 +31,20 @@ export const UpdateUser = () => {
       email,
       roles_id,
     });
-    try {
-      axios({
-        method: "put",
-        url: `${import.meta.env.VITE_API_URL}/users/${params.id}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          name,
-          email,
-          roles_id,
-        },
-      }).then(() => {
+
+    axios({
+      method: "put",
+      url: `${import.meta.env.VITE_API_URL}/users/${params.id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        name,
+        email,
+        roles_id,
+      },
+    })
+      .then(() => {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
@@ -58,15 +60,13 @@ export const UpdateUser = () => {
           } else {
           }
         });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: error.response.data.message,
+        });
       });
-    } catch (error) {
-      console.error("Error updating data:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Terjadi kesalahan saat memperbarui data!",
-      });
-    }
   };
 
   const optionRoles = listRoles.map((roles, i) => (

@@ -4,7 +4,7 @@ import Home from "./Home";
 import Dashboard from "./pages/Dashboard";
 import Roles from "./pages/Roles/Index";
 import AddRoles from "./pages/Roles/AddRoles";
-import { UpdateRoles } from "./pages/Roles/UpdateRoles";
+import UpdateRoles from "./pages/Roles/UpdateRoles";
 import User from "./pages/User/Index";
 import { AddUser } from "./pages/User/AddUser";
 import { EmptyPage } from "./pages/EmptyPage";

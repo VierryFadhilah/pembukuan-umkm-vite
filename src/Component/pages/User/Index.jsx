@@ -35,7 +35,7 @@ export default function User() {
   };
 
   const handlePageChange = (page) => {
-    fetchUsers(page);
+    setPage(page);
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
